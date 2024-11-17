@@ -221,3 +221,63 @@ print('Test accuracy:', test_acc)
 - Model diuji pada data pengujian untuk menghitung loss dan akurasi.
 - `test_acc` menunjukkan akurasi model pada data pengujian.
 
+---
+
+Link 3-2
+## 1. Mengimpor Library
+```python
+from google.colab import files
+from keras.models import load_model
+from PIL import Image
+import numpy as np
+```
+- `google.colab.files`: Digunakan untuk mengunggah file ke lingkungan Google Colab.
+- `keras.models.load_model`: Untuk memuat model yang sudah dilatih.
+- `PIL.Image`: Untuk membuka dan memproses file gambar.
+- `numpy`: Digunakan untuk manipulasi array, termasuk normalisasi data gambar.
+
+## 2. Fungsi untuk Memuat dan Memproses Gambar
+```python
+def load_and_prepare_image(file_path):
+    img = Image.open(file_path)          # Membuka file gambar
+    img = img.resize((32, 32))           # Mengubah ukuran gambar menjadi 32x32 piksel
+    img = np.array(img) / 255.0          # Mengonversi gambar menjadi array dan menormalisasi nilainya ke rentang 0-1
+    img = np.expand_dims(img, axis=0)    # Menambahkan dimensi batch (bentuk array menjadi (1, 32, 32, 3))
+    return img
+```
+Fungsi ini memastikan gambar dalam format dan ukuran yang sesuai dengan input model, yaitu ukuran 32x32 piksel dengan 3 channel warna (RGB), dan memiliki dimensi batch.
+
+## 3. Daftar Nama Kelas
+```python
+class_names = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
+```
+- CIFAR-10 memiliki 10 kelas, masing-masing diberi nama deskriptif, seperti "airplane", "automobile", dll.
+- Kode ini menggunakan daftar tersebut untuk menerjemahkan indeks prediksi menjadi nama kelas.
+
+## 4. Memuat Model
+```python
+model = load_model('path_to_your_model.h5')
+```
+- `load_model` digunakan untuk memuat model yang sudah dilatih dan disimpan dalam format .h5.
+- Path ke model harus diganti dengan lokasi sebenarnya dari model Anda.
+
+## 5. Mengunggah File Gambar
+```python
+uploaded = files.upload()
+```
+- Membuka antarmuka unggah file di Google Colab untuk mengunggah gambar yang akan diproses.
+- Semua file yang diunggah akan tersedia di dictionary uploaded, dengan nama file sebagai kunci.
+
+## 6. Memproses Gambar dan Membuat Prediksi
+```python
+for filename in uploaded.keys():
+    img = load_and_prepare_image(filename)             # Memuat dan memproses gambar
+    prediction = model.predict(img)                   # Melakukan prediksi pada gambar
+    predicted_class_index = np.argmax(prediction, axis=1)[0]  # Mendapatkan indeks kelas dengan probabilitas tertinggi
+    predicted_class_name = class_names[predicted_class_index] # Mendapatkan nama kelas dari daftar `class_names`
+    print(f'File: {filename}, Predicted Class Index: {predicted_class_index}, Predicted Class Name: {predicted_class_name}')
+```
+- `model.predict(img)`: Model memberikan output berupa probabilitas untuk setiap kelas.
+ `np.argmax(prediction, axis=1)[0]`: Mendapatkan indeks kelas dengan probabilitas tertinggi dari hasil prediksi.
+- `class_names[predicted_class_index]`: Mengonversi indeks kelas menjadi nama kelas.
+
