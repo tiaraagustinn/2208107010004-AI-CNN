@@ -154,5 +154,70 @@ print("count_cat:" + str(count_cat))
 ---
 
 Link 3-1
+##1. Memuat Dataset CIFAR-10
+```python
+(train_images, train_labels), (test_images, test_labels) = cifar10.load_data()
+```
+- CIFAR-10 adalah dataset yang terdiri dari 60.000 gambar berukuran 32x32 piksel dengan 3 channel warna (RGB).
+- Terdiri dari 10 kelas, seperti pesawat, mobil, burung, dll.
+- Dataset dibagi menjadi:
+    - 50.000 gambar untuk pelatihan (train_images, train_labels).
+    - 10.000 gambar untuk pengujian (test_images, test_labels).
 
+##2. Normalisasi Data
+```python
+train_images = train_images.astype('float32') / 255.0
+test_images = test_images.astype('float32') / 255.0
+```
+- Nilai piksel gambar awalnya dalam rentang 0-255.
+- Normalisasi membagi semua nilai piksel dengan 255 untuk merubahnya menjadi rentang 0-1, sehingga lebih cocok untuk digunakan dalam pelatihan model.
+
+##3. Konversi Label ke Bentuk Kategorikal
+```python
+train_labels = to_categorical(train_labels, 10)
+test_labels = to_categorical(test_labels, 10)
+```
+- `to_categorical` mengubah label integer (0 hingga 9) menjadi bentuk one-hot encoding.
+Misalnya, label 3 menjadi [0, 0, 0, 1, 0, 0, 0, 0, 0, 0].
+
+##4. Membangun Model CNN
+```python
+model = tf.keras.Sequential([
+    ...
+])
+```
+Model CNN terdiri dari beberapa lapisan:
+
+
+##5. Ringkasan Model
+```python
+model.summary()
+```
+Menampilkan arsitektur model, termasuk jumlah parameter yang perlu dilatih.
+
+##6. Kompilasi Model
+```python
+model.compile(optimizer='adam',
+              loss='categorical_crossentropy',
+              metrics=['accuracy'])
+```
+- Optimizer: adam, digunakan untuk memperbarui bobot model selama pelatihan.
+- Loss: categorical_crossentropy, digunakan karena ini adalah masalah klasifikasi dengan lebih dari dua kelas.
+- Metrics: accuracy, untuk mengukur akurasi selama pelatihan dan pengujian.
+
+##7. Pelatihan Model
+```python
+history = model.fit(train_images, train_labels, epochs=10, batch_size=64, validation_data=(test_images, test_labels))
+```
+- `epochs=10`: Model dilatih selama 10 iterasi penuh melalui dataset.
+- `batch_size=64`: Data dilatih dalam batch berukuran 64 gambar sekaligus.
+- `validation_data`: Data pengujian digunakan untuk mengevaluasi kinerja model pada setiap epoch.
+
+##8. Evaluasi Model
+```python
+test_loss, test_acc = model.evaluate(test_images, test_labels)
+print('Test accuracy:', test_acc)
+```
+- Model diuji pada data pengujian untuk menghitung loss dan akurasi.
+- `test_acc` menunjukkan akurasi model pada data pengujian.
 
