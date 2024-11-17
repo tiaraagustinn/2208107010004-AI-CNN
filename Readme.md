@@ -91,5 +91,68 @@ MesinKlasifikasi.fit_generator(training_set, steps_per_epoch = 8000/32, epochs =
 
 ---
 Link 2-2
+##1. Import Library
+```python
+import numpy as np
+from keras.preprocessing import image
+```
+- `numpy`: Digunakan untuk manipulasi array, termasuk konversi gambar menjadi array untuk diproses oleh model.
+- `keras.preprocessing.image`: Digunakan untuk memuat dan memproses gambar sebelum dikirim ke model.
+
+##2. Inisialisasi Variabel
+```python
+count_dog = 0
+count_cat = 0
+```
+`count_dog` dan `count_cat`: Variabel penghitung jumlah prediksi untuk kategori anjing dan kucing.
+
+##3. Perulangan untuk Memproses Gambar
+```python
+for i in range(4001, 5001):
+```
+Melakukan iterasi untuk 1000 gambar dengan nama berformat `dog.<nomor>.jpg` (dari 4001.jpg hingga `5000.jpg`) di `folder test_set/dogs/`.
+
+##4. Memuat dan Mengolah Gambar
+```python
+test_image = image.load_img('dataset/test_set/dogs/dog.' + str(i) + '.jpg', target_size = (128, 128))
+test_image = image.img_to_array(test_image)
+test_image = np.expand_dims(test_image, axis = 0)
+```
+- `image.load_img()`: Memuat gambar dari path yang diberikan dan mengubah ukuran menjadi (128, 128).
+- `image.img_to_array()`: Mengonversi gambar menjadi array numerik.
+- `np.expand_dims()`: Menambahkan dimensi baru (batch dimension) sehingga array memiliki bentuk (1, 128, 128, 3), yang diperlukan oleh model untuk prediksi.
+
+##5. Prediksi Gambar
+```python
+result = MesinKlasifikasi.predict(test_image)
+training_set.class_indices
+```
+- `MesinKlasifikasi.predict(test_image)`: Menggunakan model yang sudah dilatih (MesinKlasifikasi) untuk memprediksi label gambar.
+- `training_set.class_indices`: Menyimpan mapping antara label kelas dan indeksnya (misal, {'cat': 0, 'dog': 1}).
+
+##6. Menginterpretasikan Hasil Prediksi
+```python
+if result[0][0] == 0:
+    prediction = 'cat'
+    count_cat = count_cat + 1
+else:
+    prediction = 'dog'
+    count_dog = count_dog + 1
+```
+-`result[0][0] == 0`: Jika hasil prediksi untuk gambar adalah 0, gambar dianggap sebagai kucing.
+- `else`: Jika hasil prediksi adalah 1, gambar dianggap sebagai anjing.
+- Variabel penghitung diperbarui berdasarkan kategori prediksi.
+
+##7. Mencetak Hasil
+```python
+print("count_dog:" + str(count_dog))    
+print("count_cat:" + str(count_cat))
+```
+- `count_dog`: Total gambar yang diprediksi sebagai anjing.
+- `count_cat`: Total gambar yang diprediksi sebagai kucing.
+
+---
+
+Link 3-1
 
 
