@@ -1,5 +1,8 @@
 # Review
+Berikut adalah review dari code yang ada pada link
 
+---
+Link 2-1
 ## 1. Mengimpor library yang diperlukan
 ```python
 from tensorflow.keras.models import Sequential
@@ -84,4 +87,9 @@ MesinKlasifikasi.fit_generator(training_set, steps_per_epoch = 8000/32, epochs =
 - `epochs = 50`: Model akan dilatih selama 50 epoch.
 - `validation_data = test_set`: Menggunakan data pengujian untuk evaluasi setelah setiap epoch.
 - `validation_steps = 2000/32`: Menentukan jumlah langkah untuk evaluasi validasi.
+
+
+---
+Link 2-2
+
 
